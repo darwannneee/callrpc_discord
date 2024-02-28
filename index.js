@@ -74,7 +74,7 @@ client.on('interactionCreate', async interaction => {
   }  
 
   if(interaction.commandName === 'listrpc') {
-      const getRPCbyUsername = getData.filter(data => data.username == message.author.username)
+      const getRPCbyUsername = getData.filter(data => data.username == interaction.user.username)
       const response = JSON.stringify(getRPCbyUsername, null, 2);
       interaction.reply({content : response, ephemeral: true})
   }
