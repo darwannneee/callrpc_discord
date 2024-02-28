@@ -20,12 +20,17 @@ const commands = new SlashCommandBuilder()
         .setDescription('input your rpc')
         .setRequired(true))
 
+
+        // Slash Command for Add RPC
+const listRPC = new SlashCommandBuilder()
+.setName('listrpc')
+.setDescription('for check list RPC')
 // Rest for add 
 const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN);
   
 // Send Rest
 try {
-  await rest.put(Routes.applicationCommands(DISCORD_ID), { body: [commands] });
+  await rest.put(Routes.applicationCommands(DISCORD_ID), { body: [commands, listRPC] });
 } catch (error) {
   console.error(error);
 }
@@ -44,12 +49,6 @@ client.on('ready', () => {
 client.on('messageCreate', async message => {
   if(message.content === 'ping') {
       message.reply('Pong!')
-  }
-    
-  if(message.content === "rpc") {
-      const getRPCbyUsername = getData.filter(data => data.username == message.author.username)
-      const response = JSON.stringify(getRPCbyUsername, null, 2);
-      message.reply(response)
   }
 })
 
@@ -73,6 +72,12 @@ client.on('interactionCreate', async interaction => {
       interaction.reply('Berhasil Menambahkan');
     }
   }  
+
+  if(interaction.commandName === 'listrpc') {
+      const getRPCbyUsername = getData.filter(data => data.username == message.author.username)
+      const response = JSON.stringify(getRPCbyUsername, null, 2);
+      interaction.reply({content : response, ephemeral: true})
+  }
 })
 
 // main for Execute RPC
