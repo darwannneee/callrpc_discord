@@ -30,7 +30,7 @@ const listRPC = new SlashCommandBuilder()
     .setName('listrpc')
     .setDescription('for check list RPC');
 
-    // Slash Command for Total RPC
+// Slash Command for Total RPC
 const totalRPC = new SlashCommandBuilder()
 .setName('totalrpc')
 .setDescription('for check total RPC upload on this BOT');
@@ -106,7 +106,7 @@ client.on('interactionCreate', async interaction => {
                 const messages = [];
                 let currentMessage = '';
         
-                // Bagi pesan menjadi beberapa bagian
+                // Divide the message into several parts
                 let lines = response.split('\n');
                 for (let i = 0; i < lines.length; i++) {
                     const line = lines[i];
@@ -159,7 +159,7 @@ async function main() {
                 const provider = new ethers.providers.JsonRpcProvider(entry.rpc);
                 const balance = await provider.getBalance('0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045');
 
-                // Menambahkan getCount untuk entri saat ini
+                // Added getCount for the current entry
                 entry.getCount++;
                 totalGetCount += entry.getCount;
                 console.log(`Result For ${entry.rpcID} = ${ethers.utils.formatEther(balance)} ETH`);
