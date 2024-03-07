@@ -13,7 +13,7 @@ try {
     console.error("Error reading or parsing rpc.json:", error);
 }
 
-// Initiati Client Discord
+// Initiasi Client Discord
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages] });
 
 // Slash Command for Add RPC
@@ -30,7 +30,7 @@ const listRPC = new SlashCommandBuilder()
     .setName('listrpc')
     .setDescription('for check list RPC');
 
-    // Slash Command for List RPC
+    // Slash Command for Total RPC
 const totalRPC = new SlashCommandBuilder()
 .setName('totalrpc')
 .setDescription('for check total RPC upload on this BOT');
@@ -45,7 +45,7 @@ try {
     console.error("Error sending REST command:", error);
 }
 
-// Jika Client Menyala (Online)
+// If Client (Online)
 client.on('ready', () => {
     try {
         console.log("Bot Online (+)");
@@ -54,7 +54,7 @@ client.on('ready', () => {
     }
 });
 
-// Ketika ada Message baru
+// If there new Message
 client.on('messageCreate', async message => {
     try {
         if (message.content === 'ping') {
@@ -65,7 +65,7 @@ client.on('messageCreate', async message => {
     }
 });
 
-// Ketika ada Interaction Baru
+// If There new Interaction
 client.on('interactionCreate', async interaction => {
     try {
         if (interaction.commandName === 'ping') {
@@ -99,10 +99,9 @@ client.on('interactionCreate', async interaction => {
             });
             
             response += `Total RPC uploaded by ${interaction.user.username} = ${getRPCbyUsername.length}`    
-            // Maksimum karakter yang diizinkan dalam satu pesan Discord
+            // Maximum Character Discord
             const maxCharacterLength = 1999;
         
-            // Jika panjang pesan melebihi batas maksimum, potong pesan menjadi potongan yang lebih kecil
             if (response.length > maxCharacterLength) {
                 const messages = [];
                 let currentMessage = '';
@@ -112,7 +111,6 @@ client.on('interactionCreate', async interaction => {
                 for (let i = 0; i < lines.length; i++) {
                     const line = lines[i];
         
-                    // Jika penambahan baris berikutnya melebihi batas karakter, tambahkan pesan yang ada ke daftar pesan
                     if ((currentMessage + line).length > maxCharacterLength) {
                         messages.push(currentMessage);
                         currentMessage = '';
@@ -121,23 +119,20 @@ client.on('interactionCreate', async interaction => {
                     currentMessage += line + '\n';
                 }
         
-                // Pastikan pesan terakhir ditambahkan
                 if (currentMessage.length > 0) {
                     messages.push(currentMessage);
                 }
         
-                // Kirim pesan-pesan yang telah dibagi
                 interaction.reply({ content: messages.shift(), ephemeral: true }).then(() => {
                     messages.forEach((msg, index) => {
                         setTimeout(() => {
                             interaction.followUp({ content: msg, ephemeral: true });
-                        }, (index + 1) * 500); // Menambahkan penundaan untuk menghindari error InteractionNotReplied
+                        }, (index + 1) * 500);
                     });
                 }).catch(error => {
                     console.error('Error replying to interaction:', error);
                 });
             } else {
-                // Jika panjang pesan kurang dari batas maksimum, kirim pesan langsung
                 interaction.reply({ content: response, ephemeral: true }).catch(error => {
                     console.error('Error replying to interaction:', error);
                 });
@@ -156,7 +151,7 @@ client.on('interactionCreate', async interaction => {
 // Main function for Execute RPC
 async function main() {
     try {
-        let totalGetCount = 0; // Menghitung total getCount untuk semua RPC
+        let totalGetCount = 0;
 
         // Loop through each RPC data entry
         for (const entry of getData) {
@@ -174,15 +169,13 @@ async function main() {
             }
         }
 
-        // Menulis ulang data yang telah diperbarui ke file rpc.json
         fs.writeFileSync('./rpc.json', JSON.stringify(getData, null, 2), { encoding: 'utf8' });
     } catch (error) {
         console.error("Error during 'main' function execution:", error);
     }
 }
 
-// SetInterval agar Main selalu di jalankan
-setInterval(main, 60000); // Menjalankan main setiap 30 detik
+setInterval(main, 60000);
 
 // Login to Discord
 try {
